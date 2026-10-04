@@ -1,65 +1,91 @@
-# 🚀 Earth Defender - TypeScript Edition
+# Earth Defender - TypeScript Edition
 
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+<p align="center">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/HTML5-Canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5 Canvas">
+  <img src="https://img.shields.io/badge/Apache-HTTPD-D22128?style=for-the-badge&logo=apache&logoColor=white" alt="Apache HTTPD">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+</p>
 
-Un jeu de défense spatial orienté Arcade développé entièrement en **TypeScript natif**. Protégez la Terre contre les vagues d'astéroïdes et d'envahisseurs extraterrestres !
+Jeu d'arcade spatial en TypeScript dans lequel le joueur protège la Terre contre des aliens.
 
----
+## Fonctionnalités vérifiées
 
-## 🎮 Fonctionnalités du Jeu
+Le moteur du jeu gère :
 
-* **Gameplay Arcade :** Système de score, vagues d'ennemis progressives et gestion des points de vie de la Terre.
-* **Architecture TypeScript :** Utilisation des classes et du typage strict pour une gestion propre des entités (Joueur, Ennemis, Projectiles).
-* **Graphismes & Animations :** Rendu fluide basé sur l'API HTML5 Canvas et gestion des collisions en temps réel.
+- un canvas de 900 x 600 pixels ;
+- un joueur contrôlé au clavier ;
+- la Terre avec des points de vie ;
+- des aliens générés progressivement ;
+- des lasers ;
+- les collisions entre objets ;
+- un compteur d'aliens éliminés ;
+- une augmentation progressive de la cadence d'apparition ;
+- un fond étoilé ;
+- un écran de fin via rechargement de la partie lorsque le jeu se termine.
 
----
+## Contrôles
 
-## ⚙️ Installation et Lancement
+D'après `Input.ts` :
 
-Le projet étant développé en TypeScript, les fichiers sources (`.ts`) doivent être compilés en JavaScript (`.js`) pour être exécutés par le navigateur.
+| Touche | Action |
+|---|---|
+| `Q` | déplacement vers la gauche |
+| `D` | déplacement vers la droite |
+| `Espace` | tir |
 
-### Option 1 : Lancement Local (Sans Docker)
+## Architecture TypeScript
 
-Pour lancer le jeu localement, vous devez avoir TypeScript installé globalement sur votre machine.
+```text
+src/
+├── Classes/
+│   ├── Assets.ts
+│   ├── Game.ts
+│   ├── Input.ts
+│   ├── Position.ts
+│   └── GameObject/
+│       ├── Alien.ts
+│       ├── Earth.ts
+│       ├── GameObject.ts
+│       ├── Laser.ts
+│       ├── Player.ts
+│       └── Star.ts
+└── Script.ts
 
-   Ouvrez votre terminal à la racine du projet et lancez le compilateur en mode surveillance (watch) :
-   ```bash
-   tsc -w
+build/
+public/images/
+index.html
+tsconfig.json
+Dockerfile
 ```
 
-Cette commande va lire votre fichier `tsconfig.json` et compiler automatiquement vos fichiers `.ts` dès que vous effectuez une modification.
+Les sources TypeScript sont compilées depuis `src/` vers `build/` avec des modules ESNext.
 
-2. **Lancer le serveur :**
-Utilisez l'extension **Live Server** de VS Code sur votre fichier `index.html` pour lancer et tester le jeu sur votre navigateur.
+## Compilation locale
 
----
-
-### Option 2 : Lancement Conteneurisé (Avec Docker)
-
-Cette méthode utilise Docker pour installer le compilateur requis, compiler automatiquement le code TypeScript et servir le jeu via un serveur web Apache léger.
-
-1. **Construire l'image Docker du jeu :**
+Prérequis : TypeScript installé sur la machine.
 
 ```bash
-docker build -t game-project .
+git clone https://github.com/loic31000/Earth-Defender-Project.git
+cd Earth-Defender-Project
+tsc
 ```
 
-2. **Créer et lancer le conteneur (sur le port 1212 pour éviter les conflits) :**
+La page `index.html` charge ensuite `build/Script.js`.
+
+Vous pouvez servir le dossier avec un serveur HTTP local ou une extension comme Live Server.
+
+## Docker
+
+Le `Dockerfile` utilise `httpd:2.4-alpine` et sert directement les fichiers du dépôt.
 
 ```bash
-docker run -d -p 1212:80 --name earth-defender game-project
+docker build -t earth-defender .
+docker run --rm -p 1212:80 --name earth-defender earth-defender
 ```
 
-3. **Accéder au jeu :**
-Ouvrez votre navigateur sur [http://localhost:1212](http://localhost:1212).
+Ouvrez ensuite `http://localhost:1212`.
 
----
+## État du projet
 
-## 🛠️ Aide-mémoire Docker
-
-* **Arrêter le jeu :** `docker stop earth-defender`
-* **Relancer le jeu :** `docker start earth-defender`
-* **Forcer la reconstruction (Clean build) :** `
-docker rm -f earth-defender && docker build --no-cache -t game-project . && docker run -d -p 1212:80 --name earth-defender game-project`
+Les fichiers JavaScript compilés sont déjà présents dans `build/`. Le dépôt ne contient actuellement ni tests automatisés ni fichier de licence.
